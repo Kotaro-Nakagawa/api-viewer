@@ -7,7 +7,8 @@ const branchRecord = (
   onUpdateName: (newValue: string) => void,
   keyUpdatable: boolean,
   required: boolean,
-  onUpdateRequired: (newValue: boolean) => void
+  onUpdateRequired: (newValue: boolean) => void,
+  depth: number
 ): JSX.Element => {
   return (
     <AppSchemaObjectRecord
@@ -17,11 +18,13 @@ const branchRecord = (
       keyUpdatable={keyUpdatable}
       required={required}
       onUpdateRequired={onUpdateRequired}
+      depth={depth}
+      availableTypes={['object', 'array']}
     ></AppSchemaObjectRecord>
   )
 }
 
-const propertiesOrItems = (data: { type: unknown }): JSX.Element => {
+const propertiesOrItems = (data: { type: unknown }, depth: number): JSX.Element => {
   if (data.type === 'object') {
     if (!('properties' in data)) return <>object には properties が必須です</>
     if (!('required' in data)) data['required'] = []
@@ -36,6 +39,7 @@ const propertiesOrItems = (data: { type: unknown }): JSX.Element => {
         data={data.properties}
         keyUpdatable={true}
         requiredKeys={data.required}
+        depth={depth}
       ></AppSchemaObjectList>
     )
   }
@@ -46,6 +50,7 @@ const propertiesOrItems = (data: { type: unknown }): JSX.Element => {
         data={{ item: data.items }}
         keyUpdatable={false}
         requiredKeys={[]}
+        depth={depth}
       ></AppSchemaObjectList>
     )
   }
@@ -58,7 +63,8 @@ function AppSchemaObjectSubTable({
   onUpdateName,
   keyUpdatable,
   required,
-  onUpdateRequired
+  onUpdateRequired,
+  depth
 }: {
   recordKey: string
   data: unknown
@@ -66,6 +72,7 @@ function AppSchemaObjectSubTable({
   keyUpdatable: boolean
   required: boolean
   onUpdateRequired: (newValue: boolean) => void
+  depth: number
 }): JSX.Element {
   if (typeof data !== 'object') return <>schema が object でない</>
   if (data === null) return <>schema が null</>
@@ -73,8 +80,8 @@ function AppSchemaObjectSubTable({
 
   return (
     <>
-      {branchRecord(data, recordKey, onUpdateName, keyUpdatable, required, onUpdateRequired)}
-      {propertiesOrItems(data)}
+      {branchRecord(data, recordKey, onUpdateName, keyUpdatable, required, onUpdateRequired, depth)}
+      {propertiesOrItems(data, depth + 1)}
     </>
   )
 }

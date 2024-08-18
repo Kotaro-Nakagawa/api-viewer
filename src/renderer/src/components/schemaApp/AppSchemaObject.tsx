@@ -1,3 +1,4 @@
+import AppSchemaObjectHeader from './JsonSchemaObjectParts/AppSchemaObjectHeader'
 import AppSchemaObjectSubTable from './JsonSchemaObjectParts/AppSchemaObjectSubTable'
 
 function AppSchemaObject({ data }: { data: unknown }): JSX.Element {
@@ -5,6 +6,7 @@ function AppSchemaObject({ data }: { data: unknown }): JSX.Element {
   if (!(typeof data === 'object')) return <div>Schema が object でない</div>
   return (
     <div>
+      <AppSchemaObjectHeader />
       <AppSchemaObjectSubTable
         recordKey="<root>"
         data={data}
@@ -16,6 +18,7 @@ function AppSchemaObject({ data }: { data: unknown }): JSX.Element {
         onUpdateRequired={() => {
           return undefined
         }}
+        depth={0}
       ></AppSchemaObjectSubTable>
     </div>
   )

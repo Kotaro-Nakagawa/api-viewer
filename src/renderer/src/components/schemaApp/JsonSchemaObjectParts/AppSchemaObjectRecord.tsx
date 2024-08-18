@@ -1,26 +1,12 @@
 import AppLabel from '@renderer/components/common/AppLabel'
 import AppTextBox from '@renderer/components/common/AppTextbox'
-
-const jsonTypeNames = ['string', 'number', 'integer', 'object', 'array', 'boolean', 'null']
+import { columnWidthTemplateStr } from './columnsInfo'
 
 const columnTemplate = (depth: number): string => {
-  return Object.values({
-    indent: `${depth * 0.5}%`,
-    name: '6%',
-    type: '6%',
-    description: '1fr',
-    required: '2em',
-    format: '3%',
-    enum: '3%',
-    pattern: '3%',
-    min: '3%',
-    minex: '3%',
-    sizetype: '4em',
-    maxex: '3%',
-    max: '3%',
-    example: '12%'
-  }).join(' ')
+  return `${depth}% ${columnWidthTemplateStr()}`
 }
+
+const exclusiveTypes = ['<', '≤']
 
 function AppSchemaObjectRecord({
   recordKey,
@@ -28,7 +14,9 @@ function AppSchemaObjectRecord({
   onUpdateName,
   keyUpdatable,
   required,
-  onUpdateRequired
+  onUpdateRequired,
+  depth,
+  availableTypes
 }: {
   recordKey: string
   data: unknown
@@ -36,6 +24,8 @@ function AppSchemaObjectRecord({
   keyUpdatable: boolean
   required: boolean
   onUpdateRequired: (newValue: boolean) => void
+  depth: number
+  availableTypes: string[]
 }): JSX.Element {
   if (typeof data !== 'object') return <>変です</>
   if (data === null) return <>変です</>
@@ -70,13 +60,13 @@ function AppSchemaObjectRecord({
   }
   const min = 'min' in data && typeof data.min === 'string' ? data.min : ''
   const setMin = (newValue: string): void => {
-    // 構造が一致してないので単にこう書けない
+    // type によって minValue だったり minLength だったりする
     myObject['min'] = newValue
   }
   const isMinExclusive =
     'isMinExclusive' in data && typeof data.isMinExclusive === 'string' ? data.isMinExclusive : ''
   const setIsMinExclusive = (newValue: string): void => {
-    myObject['isMinExclusive'] = newValue
+    myObject['isMinExclusive'] = (!(newValue === exclusiveTypes[0])).toString()
   }
   const max = 'max' in data && typeof data.max === 'string' ? data.max : ''
   const setMax = (newValue: string): void => {
@@ -85,14 +75,25 @@ function AppSchemaObjectRecord({
   const isMaxExclusive =
     'isMaxExclusive' in data && typeof data.isMaxExclusive === 'string' ? data.isMaxExclusive : ''
   const setIsMaxExclusive = (newValue: string): void => {
-    myObject['isMaxExclusive'] = newValue
+    myObject['isMaxExclusive'] = (!(newValue === exclusiveTypes[0])).toString()
   }
   const example = 'example' in data && typeof data.example === 'string' ? data.example : ''
   const setExample = (newValue: string): void => {
     myObject['example'] = newValue
   }
+  const restrictTarget = ((): string => {
+    switch (type) {
+      case 'string':
+        return 'length'
+      case 'number':
+        return 'value'
+      case 'integer':
+        return 'value'
+    }
+    return '-'
+  })()
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: columnTemplate(0) }}>
+    <div style={{ display: 'grid', gridTemplateColumns: columnTemplate(depth) }}>
       <div></div>
       {keyUpdatable ? (
         <AppTextBox
@@ -105,18 +106,18 @@ function AppSchemaObjectRecord({
         <AppLabel value={name}></AppLabel>
       )}
       <AppTextBox
+        data={example}
+        onUpdate={(value: string) => {
+          setExample(value)
+        }}
+      ></AppTextBox>
+      <AppTextBox
         data={type}
         onUpdate={(value: string) => {
           setType(value)
         }}
         proposer={(value: string) => {
-          return jsonTypeNames.filter((t) => t.startsWith(value))
-        }}
-      ></AppTextBox>
-      <AppTextBox
-        data={description}
-        onUpdate={(value: string) => {
-          setDescription(value)
+          return availableTypes.filter((t) => t.startsWith(value))
         }}
       ></AppTextBox>
       <AppTextBox
@@ -155,13 +156,15 @@ function AppSchemaObjectRecord({
         onUpdate={(value: string) => {
           setIsMinExclusive(value)
         }}
+        proposer={() => exclusiveTypes}
       ></AppTextBox>
-      <div>{type === 'number' ? 'value' : 'length'}</div>
+      <AppLabel value={restrictTarget} />
       <AppTextBox
         data={isMaxExclusive}
         onUpdate={(value: string) => {
           setIsMaxExclusive(value)
         }}
+        proposer={() => exclusiveTypes}
       ></AppTextBox>
       <AppTextBox
         data={max}
@@ -170,9 +173,9 @@ function AppSchemaObjectRecord({
         }}
       ></AppTextBox>
       <AppTextBox
-        data={example}
+        data={description}
         onUpdate={(value: string) => {
-          setExample(value)
+          setDescription(value)
         }}
       ></AppTextBox>
     </div>

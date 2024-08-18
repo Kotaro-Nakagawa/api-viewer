@@ -12,7 +12,8 @@ const recordOrSubTableFromKeyValue = (
   key: string,
   value: unknown,
   keyUpdatable: boolean,
-  requiredKeys: string[]
+  requiredKeys: string[],
+  depth: number
 ): JSX.Element => {
   if (typeof value !== 'object') return <>要素が object 型ではありません</>
   if (value === null) return <>要素が null です</>
@@ -32,6 +33,7 @@ const recordOrSubTableFromKeyValue = (
         onUpdateRequired={(newValue: boolean) => {
           newValue ? requiredKeys.push(key) : removeValueFromArray(requiredKeys, key)
         }}
+        depth={depth}
       ></AppSchemaObjectSubTable>
     )
   }
@@ -49,6 +51,8 @@ const recordOrSubTableFromKeyValue = (
       onUpdateRequired={(newValue: boolean) => {
         newValue ? requiredKeys.push(key) : removeValueFromArray(requiredKeys, key)
       }}
+      depth={depth}
+      availableTypes={['string', 'number', 'integer', 'boolean']}
     ></AppSchemaObjectRecord>
   )
 }
@@ -56,11 +60,13 @@ const recordOrSubTableFromKeyValue = (
 function AppSchemaObjectList({
   data,
   keyUpdatable,
-  requiredKeys
+  requiredKeys,
+  depth
 }: {
   data: unknown
   keyUpdatable: boolean
   requiredKeys: string[]
+  depth: number
 }): JSX.Element {
   // array の場合は items ってキーを付与して送ってもらう
   if (typeof data !== 'object') return <>変です</>
@@ -68,7 +74,7 @@ function AppSchemaObjectList({
   return (
     <>
       {Object.entries(data).map(([k, v]) => {
-        return recordOrSubTableFromKeyValue(k, v, keyUpdatable, requiredKeys)
+        return recordOrSubTableFromKeyValue(k, v, keyUpdatable, requiredKeys, depth)
       })}
     </>
   )
