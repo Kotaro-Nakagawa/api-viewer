@@ -58,24 +58,53 @@ function AppSchemaObjectRecord({
   const setPattern = (newValue: string): void => {
     myObject['pattern'] = newValue
   }
-  const min = 'min' in data && typeof data.min === 'string' ? data.min : ''
+  const min =
+    type === 'string'
+      ? 'minLength' in data && typeof data.minLength === 'number'
+        ? data.minLength
+        : ''
+      : 'minimum' in data && typeof data.minimum === 'number'
+        ? data.minimum
+        : ''
   const setMin = (newValue: string): void => {
-    // type によって minValue だったり minLength だったりする
-    myObject['min'] = newValue
+    if (type === 'string') {
+      myObject['minLength'] = parseInt(newValue, 10)
+    } else {
+      myObject['minimum'] = parseFloat(newValue)
+    }
   }
   const isMinExclusive =
-    'isMinExclusive' in data && typeof data.isMinExclusive === 'string' ? data.isMinExclusive : ''
+    'exclusiveMinimum' in data && typeof data.exclusiveMinimum === 'boolean'
+      ? data.exclusiveMinimum
+        ? exclusiveTypes[0]
+        : exclusiveTypes[1]
+      : ''
   const setIsMinExclusive = (newValue: string): void => {
-    myObject['isMinExclusive'] = (!(newValue === exclusiveTypes[0])).toString()
+    myObject['exclusiveMinimum'] = !(newValue === exclusiveTypes[0])
   }
-  const max = 'max' in data && typeof data.max === 'string' ? data.max : ''
+  const max =
+    type === 'string'
+      ? 'maxLength' in data && typeof data.maxLength === 'number'
+        ? data.maxLength
+        : ''
+      : 'maximum' in data && typeof data.maximum === 'number'
+        ? data.maximum
+        : ''
   const setMax = (newValue: string): void => {
-    myObject['max'] = newValue
+    if (type === 'string') {
+      myObject['maxLength'] = parseInt(newValue, 10)
+    } else {
+      myObject['maximum'] = parseFloat(newValue)
+    }
   }
   const isMaxExclusive =
-    'isMaxExclusive' in data && typeof data.isMaxExclusive === 'string' ? data.isMaxExclusive : ''
+    'exclusiveMaximum' in data && typeof data.exclusiveMaximum === 'boolean'
+      ? data.exclusiveMaximum
+        ? exclusiveTypes[0]
+        : exclusiveTypes[1]
+      : ''
   const setIsMaxExclusive = (newValue: string): void => {
-    myObject['isMaxExclusive'] = (!(newValue === exclusiveTypes[0])).toString()
+    myObject['exclusiveMaximum'] = !(newValue === exclusiveTypes[0])
   }
   const example = 'example' in data && typeof data.example === 'string' ? data.example : ''
   const setExample = (newValue: string): void => {
@@ -146,7 +175,7 @@ function AppSchemaObjectRecord({
         }}
       ></AppTextBox>
       <AppTextBox
-        data={min}
+        data={min.toString()}
         onUpdate={(value: string) => {
           setMin(value)
         }}
@@ -167,7 +196,7 @@ function AppSchemaObjectRecord({
         proposer={() => exclusiveTypes}
       ></AppTextBox>
       <AppTextBox
-        data={max}
+        data={max.toString()}
         onUpdate={(value: string) => {
           setMax(value)
         }}
