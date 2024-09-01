@@ -1,6 +1,7 @@
 import AppLabel from '@renderer/components/common/AppLabel'
 import AppTextBox from '@renderer/components/common/AppTextbox'
 import { columnWidthTemplateStr } from './columnsInfo'
+import { reflectChange } from '../reflectChange'
 
 const columnTemplate = (depth: number): string => {
   return `${depth}% ${columnWidthTemplateStr()}`
@@ -138,12 +139,14 @@ function AppSchemaObjectRecord({
         data={example}
         onUpdate={(value: string) => {
           setExample(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={type}
         onUpdate={(value: string) => {
           setType(value)
+          reflectChange()
         }}
         proposer={(value: string) => {
           return availableTypes.filter((t) => t.startsWith(value))
@@ -153,6 +156,7 @@ function AppSchemaObjectRecord({
         data={required ? '✓' : ''}
         onUpdate={(value: string) => {
           setRequired(value)
+          reflectChange()
         }}
         proposer={() => ['✓', '']}
       ></AppTextBox>
@@ -160,30 +164,35 @@ function AppSchemaObjectRecord({
         data={format}
         onUpdate={(value: string) => {
           setFormat(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={enumWords}
         onUpdate={(value: string) => {
           setEnumWords(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={pattern}
         onUpdate={(value: string) => {
           setPattern(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={min.toString()}
         onUpdate={(value: string) => {
           setMin(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={isMinExclusive}
         onUpdate={(value: string) => {
           setIsMinExclusive(value)
+          reflectChange()
         }}
         proposer={() => exclusiveTypes}
       ></AppTextBox>
@@ -192,6 +201,7 @@ function AppSchemaObjectRecord({
         data={isMaxExclusive}
         onUpdate={(value: string) => {
           setIsMaxExclusive(value)
+          reflectChange()
         }}
         proposer={() => exclusiveTypes}
       ></AppTextBox>
@@ -199,12 +209,14 @@ function AppSchemaObjectRecord({
         data={max.toString()}
         onUpdate={(value: string) => {
           setMax(value)
+          reflectChange()
         }}
       ></AppTextBox>
       <AppTextBox
         data={description}
         onUpdate={(value: string) => {
           setDescription(value)
+          reflectChange()
         }}
       ></AppTextBox>
     </div>

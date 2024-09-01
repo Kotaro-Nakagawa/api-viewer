@@ -3,6 +3,7 @@ import AppOpenAPIObject from './schemaApp/AppOpenAPIObject'
 import SideArea from './sideBar/SideArea'
 import AppDirEnt from '@appType/AppDirEnt'
 import AppAPIMaker from './quickMaker/AppAPIMaker'
+import { setReflectChange } from './schemaApp/reflectChange'
 
 const editorTypes = ['none', 'newFile', 'edit'] as const
 type editorTypeType = (typeof editorTypes)[number]
@@ -40,6 +41,10 @@ function ApiSchemaApp(): JSX.Element {
     setOpenFile(data)
     await window.electron.ipcRenderer.invoke('createYaml', currentFilePath, fileName, data)
   }
+  const dataToUpdate = structuredClone(openFile)
+  setReflectChange(() => {
+    setOpenFile(dataToUpdate)
+  })
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '20em 1fr', height: '100%' }}>
       <SideArea
@@ -64,7 +69,7 @@ function ApiSchemaApp(): JSX.Element {
         {((): JSX.Element => {
           switch (currentEditorType) {
             case 'edit':
-              return <AppOpenAPIObject data={openFile} />
+              return <AppOpenAPIObject data={dataToUpdate} />
             case 'newFile':
               return (
                 <AppAPIMaker
