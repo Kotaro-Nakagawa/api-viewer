@@ -51,9 +51,16 @@ function AppSchemaObjectRecord({
   const setFormat = (newValue: string): void => {
     myObject['format'] = newValue
   }
-  const enumWords = 'enumWords' in data && typeof data.enumWords === 'string' ? data.enumWords : ''
+  const enumWords = 'enum' in data && Array.isArray(data.enum) ? data.enum.join(',') : ''
   const setEnumWords = (newValue: string): void => {
-    myObject['enumWords'] = newValue
+    const parts = newValue.split(',')
+    if (type === 'string') {
+      myObject['enum'] = parts
+    } else if (type === 'number') {
+      myObject['enum'] = parts.map((p) => parseFloat(p))
+    } else if (type === 'integer') {
+      myObject['enum'] = parts.map((p) => parseInt(p, 10))
+    }
   }
   const pattern = 'pattern' in data && typeof data.pattern === 'string' ? data.pattern : ''
   const setPattern = (newValue: string): void => {
