@@ -1,4 +1,5 @@
 import AppTextBox from '../common/AppTextbox'
+import AppComponentsObject from './AppComponentsObject'
 import AppInfoObject from './AppInfoObject'
 import AppPathsObject from './AppPathsObject'
 import AppServersObject from './AppServersObject'
@@ -51,7 +52,11 @@ function AppOpenAPIObject({ data }: { data: unknown }): JSX.Element {
       <h2>webhooks</h2>
       {hasWebhooks(data) ? <div>webhook 未実装</div> : <div>webhooks がありません</div>}
       <h2>components</h2>
-      {hasComponents(data) ? <div>components 未実装</div> : <div>components がありません</div>}
+      {hasComponents(data) ? (
+        <AppComponentsObject data={data.components}></AppComponentsObject>
+      ) : (
+        <div>components がありません</div>
+      )}
       <h2>security</h2>
       {hasSecurity(data) ? <div>security 未実装</div> : <div>security がありません</div>}
       <h2>tags</h2>

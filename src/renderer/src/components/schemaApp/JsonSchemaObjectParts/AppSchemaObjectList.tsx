@@ -1,4 +1,5 @@
 import AppSchemaObjectRecord from './AppSchemaObjectRecord'
+import AppSchemaObjectReferenceRecord from './AppSchemaObjectReferenceRecord'
 import AppSchemaObjectSubTable from './AppSchemaObjectSubTable'
 
 const removeValueFromArray = (array: string[], value: string): void => {
@@ -17,6 +18,23 @@ const recordOrSubTableFromKeyValue = (
 ): JSX.Element => {
   if (typeof value !== 'object') return <>要素が object 型ではありません</>
   if (value === null) return <>要素が null です</>
+  if ('$ref' in value)
+    return (
+      <AppSchemaObjectReferenceRecord
+        recordKey={key}
+        data={value}
+        onUpdateName={(newvalue: string) => {
+          value[newvalue] = value[key]
+          delete value[key]
+        }}
+        keyUpdatable={keyUpdatable}
+        required={requiredKeys.includes(key)}
+        onUpdateRequired={(newValue: boolean) => {
+          newValue ? requiredKeys.push(key) : removeValueFromArray(requiredKeys, key)
+        }}
+        depth={depth}
+      />
+    )
   if (!('type' in value)) return <>type は必須です</>
   if (value.type === 'object' || value.type === 'array') {
     return (

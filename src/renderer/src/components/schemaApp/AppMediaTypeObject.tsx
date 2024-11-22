@@ -1,7 +1,7 @@
 import AppLabel from '../common/AppLabel'
 import AppExampleObject from './AppExampleObject'
 import AppExamplesObject from './AppExamplesObject'
-import AppSchemaObject from './AppSchemaObject'
+import AppSchemaOrReferenceObject from './AppSchemaOrReferenceObject'
 
 function AppMediaTypeObject({ data }: { data: unknown }): JSX.Element {
   if (!(typeof data === 'object')) return <div>Media Type が object でない</div>
@@ -9,7 +9,7 @@ function AppMediaTypeObject({ data }: { data: unknown }): JSX.Element {
   return (
     <div>
       <AppLabel value="schema"></AppLabel>
-      <AppSchemaObject data={data['schema']}></AppSchemaObject>
+      <AppSchemaOrReferenceObject data={data['schema']} />
       <AppLabel value="example"></AppLabel>
       <AppExampleObject data={data['example']}></AppExampleObject>
       <AppLabel value="examples"></AppLabel>
