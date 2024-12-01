@@ -6,6 +6,7 @@ function AppResponsesObject({ data }: { data: unknown }): JSX.Element {
   if (data === null) return <div>Responses が null</div>
   return (
     <div id={'responses'}>
+      <AppLabel value={'Responses'}></AppLabel>
       {Object.entries(data).map(([k, d]) => {
         return (
           <>

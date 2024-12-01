@@ -54,7 +54,7 @@ function AppTextBox({
   return (
     <div style={{ position: 'relative' }}>
       <input
-        style={{ boxSizing: 'content-box', WebkitBoxSizing: 'border-box', width: '100%' }}
+        className="base-text-box"
         type="text"
         value={text}
         onChange={(e) => {

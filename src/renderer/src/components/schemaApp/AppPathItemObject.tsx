@@ -73,6 +73,7 @@ function AppPathItemObject({ data }: { data: unknown }): JSX.Element {
               key={p}
               ref={selectRef(p)}
               style={{ display: p === dataMethods[0] ? 'block' : 'none' }}
+              className='app-operation-object'
             >
               {<AppOperationObject data={data[p]}></AppOperationObject>}
             </div>

@@ -22,47 +22,54 @@ function AppOpenAPIObject({ data }: { data: unknown }): JSX.Element {
 
   return (
     <div id={'schema-editor'} style={{ minHeight: '200%' }}>
-      <h1>OpenAPI</h1>
-      openAPI
-      <AppTextBox
-        data={data.openapi}
-        onUpdate={(value: string) => {
-          data.openapi = value
-        }}
-      ></AppTextBox>
-      <h2>info</h2>
-      <AppInfoObject data={data['info']} />
-      <h2>JsonSchemaDialect</h2>
-      <AppTextBox
-        data={hasjsonSchemaDialect(data) ? data.jsonSchemaDialect : ''}
-        onUpdate={(value: string) => {
-          data['jsonSchemaDialect'] = value
-        }}
-      ></AppTextBox>
-      <h2>servers</h2>
-      <div>
-        <AppServersObject data={!hasServers(data) ? [] : data.servers}></AppServersObject>
+      <div id="main">
+        {hasPaths(data) ? (
+          <AppPathsObject data={data.paths}></AppPathsObject>
+        ) : (
+          <div>path がありません</div>
+        )}
       </div>
-      <h2>paths</h2>
-      {hasPaths(data) ? (
-        <AppPathsObject data={data.paths}></AppPathsObject>
-      ) : (
-        <div>path がありません</div>
-      )}
-      <h2>webhooks</h2>
-      {hasWebhooks(data) ? <div>webhook 未実装</div> : <div>webhooks がありません</div>}
-      <h2>components</h2>
-      {hasComponents(data) ? (
-        <AppComponentsObject data={data.components}></AppComponentsObject>
-      ) : (
-        <div>components がありません</div>
-      )}
-      <h2>security</h2>
-      {hasSecurity(data) ? <div>security 未実装</div> : <div>security がありません</div>}
-      <h2>tags</h2>
-      {hasTags(data) ? <div>to be implemented</div> : <div>tags がありません</div>}
-      <h2>externalDocs</h2>
-      {hasexternalDocs(data) ? <div>to be implemented</div> : <div>externalDocs がありません</div>}
+      <div id="metadata">
+        <h1>OpenAPI</h1>
+        openAPI
+        <AppTextBox
+          data={data.openapi}
+          onUpdate={(value: string) => {
+            data.openapi = value
+          }}
+        ></AppTextBox>
+        <h2>info</h2>
+        <AppInfoObject data={data['info']} />
+        <h2>JsonSchemaDialect</h2>
+        <AppTextBox
+          data={hasjsonSchemaDialect(data) ? data.jsonSchemaDialect : ''}
+          onUpdate={(value: string) => {
+            data['jsonSchemaDialect'] = value
+          }}
+        ></AppTextBox>
+        <h2>servers</h2>
+        <div>
+          <AppServersObject data={!hasServers(data) ? [] : data.servers}></AppServersObject>
+        </div>
+        <h2>webhooks</h2>
+        {hasWebhooks(data) ? <div>webhook 未実装</div> : <div>webhooks がありません</div>}
+        <h2>components</h2>
+        {hasComponents(data) ? (
+          <AppComponentsObject data={data.components}></AppComponentsObject>
+        ) : (
+          <div>components がありません</div>
+        )}
+        <h2>security</h2>
+        {hasSecurity(data) ? <div>security 未実装</div> : <div>security がありません</div>}
+        <h2>tags</h2>
+        {hasTags(data) ? <div>to be implemented</div> : <div>tags がありません</div>}
+        <h2>externalDocs</h2>
+        {hasexternalDocs(data) ? (
+          <div>to be implemented</div>
+        ) : (
+          <div>externalDocs がありません</div>
+        )}
+      </div>
     </div>
   )
 }
