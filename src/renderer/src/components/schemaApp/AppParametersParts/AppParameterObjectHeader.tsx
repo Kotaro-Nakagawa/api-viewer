@@ -1,3 +1,5 @@
+import AppTableHeader from "@renderer/components/common/AppTableHeader"
+
 const gridTemplate = Object.values({
   name: '10em',
   in: '5em',
@@ -9,14 +11,14 @@ const gridTemplate = Object.values({
 
 function AppParameterObjectHeader(): JSX.Element {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: gridTemplate }}>
+    <AppTableHeader columnTemplate={gridTemplate}>
       <div>{'name'}</div>
       <div>{'in'}</div>
       <div>{'description'}</div>
       <div>{'req.'}</div>
       <div>{'dep.'}</div>
       <div>{'emp.'}</div>
-    </div>
+    </AppTableHeader>
   )
 }
 

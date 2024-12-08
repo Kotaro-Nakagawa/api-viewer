@@ -225,4 +225,28 @@ code {
   height: 100%;
   background-color: transparent;
   color: var(--ev-c-text-1);
+  border: none;
+  outline: none;
+}
+
+.base-text-box:focus {
+  border-bottom: solid 2px #087ea4;
+  margin-bottom: -2px;
+}
+
+.table-cell {
+  border-right: 1px solid var(--ev-c-black);
+  padding-left: 0.3em;
+}
+
+.table-row {
+  border-bottom: 1px solid var(--ev-c-gray-3);
+}
+
+.table-row:hover {
+  background-color: var(--ev-c-gray-3);
+}
+
+.table-header-row {
+  border-top: 1px solid var(--ev-c-gray-1);
 }

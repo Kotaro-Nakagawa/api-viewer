@@ -1,13 +1,14 @@
 import AppLabel from '@renderer/components/common/AppLabel'
 import { columnTitles, columnWidthTemplateStr } from './columnsInfo'
+import AppTableHeader from '@renderer/components/common/AppTableHeader'
 
 function AppSchemaObjectHeader(): JSX.Element {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: columnWidthTemplateStr() }}>
+    <AppTableHeader columnTemplate={columnWidthTemplateStr()}>
       {columnTitles().map((c) => (
         <AppLabel key={c} value={c}></AppLabel>
       ))}
-    </div>
+    </AppTableHeader>
   )
 }
 

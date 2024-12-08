@@ -1,3 +1,4 @@
+import AppTableRecord from '../common/AppTableRecord'
 import AppTextBox from '../common/AppTextbox'
 
 const gridTemplate = Object.values({
@@ -13,7 +14,7 @@ function AppParameterObject({ data }: { data: unknown }): JSX.Element {
   if (!(typeof data === 'object')) return <div>parameter が object でない</div>
   if (data === null) return <div>paraemter が null</div>
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: gridTemplate }}>
+    <AppTableRecord columnTemplate={gridTemplate}>
       <AppTextBox data={data['name']} onUpdate={(v: string) => (data['name'] = v)}></AppTextBox>
       <AppTextBox data={data['in']} onUpdate={(v: string) => (data['in'] = v)}></AppTextBox>
       <AppTextBox
@@ -32,7 +33,7 @@ function AppParameterObject({ data }: { data: unknown }): JSX.Element {
         data={data['allowEmptyValue']}
         onUpdate={(v: string) => (data['allowEmptyValue'] = v)}
       ></AppTextBox>
-    </div>
+    </AppTableRecord>
   )
 }
 

@@ -2,6 +2,7 @@ import AppLabel from '@renderer/components/common/AppLabel'
 import AppTextBox from '@renderer/components/common/AppTextbox'
 import { columnWidthTemplateStr } from './columnsInfo'
 import { reflectChange } from '../reflectChange'
+import AppTableRecord from '@renderer/components/common/AppTableRecord'
 
 const columnTemplate = (depth: number): string => {
   return `${depth}% ${columnWidthTemplateStr()}`
@@ -130,7 +131,7 @@ function AppSchemaObjectRecord({
     return '-'
   })()
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: columnTemplate(depth) }}>
+    <AppTableRecord columnTemplate={columnTemplate(depth)}>
       <div></div>
       {keyUpdatable ? (
         <AppTextBox
@@ -226,7 +227,7 @@ function AppSchemaObjectRecord({
           reflectChange()
         }}
       ></AppTextBox>
-    </div>
+    </AppTableRecord>
   )
 }
 
