@@ -1,4 +1,4 @@
-import { RefObject, useRef, useState } from 'react'
+import { RefObject, useRef, useState, createRef } from 'react'
 import AppPathItemObject from './AppPathItemObject'
 import AppPathsObjectPathTable from './AppPathsObjectParts/AppPathsObjectPathTable'
 
@@ -29,6 +29,9 @@ function AppPathsObject({ data }: { data: unknown }): JSX.Element {
   const pathStrs = Object.keys(data)
   const [paths, setPaths] = useState<string[]>(pathStrs)
   const pathItemRefs = useRef<RefObject<HTMLDivElement>[]>([])
+  paths.forEach((_, index) => {
+    pathItemRefs.current[index] = createRef<HTMLDivElement>()
+  })
   return (
     <div id={'paths'}>
       <div style={{ display: 'none' }}>
@@ -53,8 +56,12 @@ function AppPathsObject({ data }: { data: unknown }): JSX.Element {
         }}
       ></AppPathsObjectPathTable>
       {paths.map((p, i) => {
-        return (
+        return i === 0 ? (
           <div key={i} ref={pathItemRefs.current[i]}>
+            {<AppPathItemObject data={data[p]}></AppPathItemObject>}
+          </div>
+        ) : (
+          <div key={i} ref={pathItemRefs.current[i]} style={{ display: 'none' }}>
             {<AppPathItemObject data={data[p]}></AppPathItemObject>}
           </div>
         )

@@ -1,4 +1,4 @@
-import AppTableHeader from "@renderer/components/common/AppTableHeader"
+import AppTableHeader from '@renderer/components/common/AppTableHeader'
 
 const gridTemplate = Object.values({
   name: '10em',
